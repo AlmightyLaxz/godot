@@ -187,6 +187,10 @@ void GodotBody3D::set_active(bool p_active) {
 	} else if (get_space()) {
 		get_space()->body_remove_from_active_list(&active_list);
 	}
+
+	// Set the sleep still time back to zero, if a body is already over the body_time_to_sleep
+	// it will go straight back to sleep when the body is set as active again
+	still_time = 0;
 }
 
 void GodotBody3D::set_param(PhysicsServer3D::BodyParameter p_param, const Variant &p_value) {
@@ -787,7 +791,7 @@ bool GodotBody3D::sleep_test(real_t p_step) {
 
 		return still_time > get_space()->get_body_time_to_sleep();
 	} else {
-		still_time = 0; //maybe this should be set to 0 on set_active?
+		still_time = 0;
 		return false;
 	}
 }
